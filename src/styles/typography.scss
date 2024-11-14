@@ -1,0 +1,49 @@
+$font-sizes: (
+	caption: 14px,
+	label: 16px,
+	body: 18px,
+	headline: 20px,
+	title: 28px,
+	display: 32px
+);
+
+$line-heights: (
+	caption: 20px,
+	label: 24px,
+	body: 26px,
+	headline: 28px,
+	title: 36px,
+	display: 44px
+);
+
+$letter-spacing: (
+	caption: -0.55px,
+	label: -0.65px,
+	body: -0.75px,
+	headline: -0.85px,
+	title: -1.35px,
+	display: -1.65px
+);
+
+$letter-spacing-accent: (
+	caption: -0.5px,
+	label: -0.6px,
+	body: -0.7px,
+	headline: -0.8px,
+	title: -1.2px,
+	display: -1.5px
+);
+
+@each $type, $size in $font-sizes {
+	.#{$type} {
+		font-size: $size;
+		line-height: map-get($line-heights, $type);
+		letter-spacing: map-get($letter-spacing, $type);
+		font-weight: 500;
+
+		&.accent {
+			letter-spacing: map-get($letter-spacing-accent, $type);
+			font-weight: 600;
+		}
+	}
+}
