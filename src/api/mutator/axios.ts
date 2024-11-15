@@ -1,7 +1,8 @@
 import Axios, { type AxiosError, type AxiosRequestConfig } from 'axios';
 
 export const AXIOS_INSTANCE = Axios.create({
-	baseURL: 'http://localhost:4000'
+	baseURL: 'http://localhost:4000',
+	withCredentials: true
 });
 
 export const customInstance = <T>(

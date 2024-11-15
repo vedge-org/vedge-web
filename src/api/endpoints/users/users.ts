@@ -5,192 +5,337 @@
  * 암표 방지 티켓 예매 서비스 Vedge API 문서
  * OpenAPI spec version: 1.0
  */
-import {
-  createInfiniteQuery,
-  createMutation,
-  createQuery
-} from '@tanstack/svelte-query'
+import { createInfiniteQuery, createMutation, createQuery } from '@tanstack/svelte-query';
 import type {
-  CreateInfiniteQueryOptions,
-  CreateInfiniteQueryResult,
-  CreateMutationOptions,
-  CreateMutationResult,
-  CreateQueryOptions,
-  CreateQueryResult,
-  MutationFunction,
-  QueryFunction,
-  QueryKey
-} from '@tanstack/svelte-query'
-import type {
-  UpdateUserDto
-} from '../../schemas'
+	CreateInfiniteQueryOptions,
+	CreateInfiniteQueryResult,
+	CreateMutationOptions,
+	CreateMutationResult,
+	CreateQueryOptions,
+	CreateQueryResult,
+	MutationFunction,
+	QueryFunction,
+	QueryKey
+} from '@tanstack/svelte-query';
+import type { UpdateUserDto } from '../../schemas';
 import { customInstance } from '../../mutator/axios';
 import type { ErrorType, BodyType } from '../../mutator/axios';
 
-
 type SecondParameter<T extends (...args: any) => any> = Parameters<T>[1];
-
 
 /**
  * @summary 내 정보 조회
  */
 export const usersControllerGetMe = (
-    
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+	options?: SecondParameter<typeof customInstance>,
+	signal?: AbortSignal
 ) => {
-      
-      
-      return customInstance<unknown>(
-      {url: `/users/me`, method: 'GET', signal
-    },
-      options);
-    }
-  
+	return customInstance<unknown>({ url: `/users/me`, method: 'GET', signal }, options);
+};
 
 export const getUsersControllerGetMeQueryKey = () => {
-    return [`/users/me`] as const;
-    }
+	return [`/users/me`] as const;
+};
 
-    
-export const getUsersControllerGetMeInfiniteQueryOptions = <TData = Awaited<ReturnType<typeof usersControllerGetMe>>, TError = ErrorType<void>>( options?: { query?:CreateInfiniteQueryOptions<Awaited<ReturnType<typeof usersControllerGetMe>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
-) => {
+export const getUsersControllerGetMeInfiniteQueryOptions = <
+	TData = Awaited<ReturnType<typeof usersControllerGetMe>>,
+	TError = ErrorType<void>
+>(options?: {
+	query?: CreateInfiniteQueryOptions<
+		Awaited<ReturnType<typeof usersControllerGetMe>>,
+		TError,
+		TData
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey = queryOptions?.queryKey ?? getUsersControllerGetMeQueryKey();
 
-  const queryKey =  queryOptions?.queryKey ?? getUsersControllerGetMeQueryKey();
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof usersControllerGetMe>>> = ({ signal }) =>
+		usersControllerGetMe(requestOptions, signal);
 
-  
+	return { queryKey, queryFn, ...queryOptions } as CreateInfiniteQueryOptions<
+		Awaited<ReturnType<typeof usersControllerGetMe>>,
+		TError,
+		TData
+	> & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof usersControllerGetMe>>> = ({ signal }) => usersControllerGetMe(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as CreateInfiniteQueryOptions<Awaited<ReturnType<typeof usersControllerGetMe>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type UsersControllerGetMeInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof usersControllerGetMe>>>
-export type UsersControllerGetMeInfiniteQueryError = ErrorType<void>
-
-
-/**
- * @summary 내 정보 조회
- */
-
-export function createUsersControllerGetMeInfinite<TData = Awaited<ReturnType<typeof usersControllerGetMe>>, TError = ErrorType<void>>(
-  options?: { query?:CreateInfiniteQueryOptions<Awaited<ReturnType<typeof usersControllerGetMe>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
-
-  ): CreateInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getUsersControllerGetMeInfiniteQueryOptions(options)
-
-  const query = createInfiniteQuery(queryOptions) as CreateInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-export const getUsersControllerGetMeQueryOptions = <TData = Awaited<ReturnType<typeof usersControllerGetMe>>, TError = ErrorType<void>>( options?: { query?:CreateQueryOptions<Awaited<ReturnType<typeof usersControllerGetMe>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getUsersControllerGetMeQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof usersControllerGetMe>>> = ({ signal }) => usersControllerGetMe(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as CreateQueryOptions<Awaited<ReturnType<typeof usersControllerGetMe>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type UsersControllerGetMeQueryResult = NonNullable<Awaited<ReturnType<typeof usersControllerGetMe>>>
-export type UsersControllerGetMeQueryError = ErrorType<void>
-
+export type UsersControllerGetMeInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof usersControllerGetMe>>
+>;
+export type UsersControllerGetMeInfiniteQueryError = ErrorType<void>;
 
 /**
  * @summary 내 정보 조회
  */
 
-export function createUsersControllerGetMe<TData = Awaited<ReturnType<typeof usersControllerGetMe>>, TError = ErrorType<void>>(
-  options?: { query?:CreateQueryOptions<Awaited<ReturnType<typeof usersControllerGetMe>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+export function createUsersControllerGetMeInfinite<
+	TData = Awaited<ReturnType<typeof usersControllerGetMe>>,
+	TError = ErrorType<void>
+>(options?: {
+	query?: CreateInfiniteQueryOptions<
+		Awaited<ReturnType<typeof usersControllerGetMe>>,
+		TError,
+		TData
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}): CreateInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+	const queryOptions = getUsersControllerGetMeInfiniteQueryOptions(options);
 
-  ): CreateQueryResult<TData, TError> & { queryKey: QueryKey } {
+	const query = createInfiniteQuery(queryOptions) as CreateInfiniteQueryResult<TData, TError> & {
+		queryKey: QueryKey;
+	};
 
-  const queryOptions = getUsersControllerGetMeQueryOptions(options)
+	query.queryKey = queryOptions.queryKey;
 
-  const query = createQuery(queryOptions) as CreateQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
+	return query;
 }
 
+export const getUsersControllerGetMeQueryOptions = <
+	TData = Awaited<ReturnType<typeof usersControllerGetMe>>,
+	TError = ErrorType<void>
+>(options?: {
+	query?: CreateQueryOptions<Awaited<ReturnType<typeof usersControllerGetMe>>, TError, TData>;
+	request?: SecondParameter<typeof customInstance>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
+	const queryKey = queryOptions?.queryKey ?? getUsersControllerGetMeQueryKey();
+
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof usersControllerGetMe>>> = ({ signal }) =>
+		usersControllerGetMe(requestOptions, signal);
+
+	return { queryKey, queryFn, ...queryOptions } as CreateQueryOptions<
+		Awaited<ReturnType<typeof usersControllerGetMe>>,
+		TError,
+		TData
+	> & { queryKey: QueryKey };
+};
+
+export type UsersControllerGetMeQueryResult = NonNullable<
+	Awaited<ReturnType<typeof usersControllerGetMe>>
+>;
+export type UsersControllerGetMeQueryError = ErrorType<void>;
+
+/**
+ * @summary 내 정보 조회
+ */
+
+export function createUsersControllerGetMe<
+	TData = Awaited<ReturnType<typeof usersControllerGetMe>>,
+	TError = ErrorType<void>
+>(options?: {
+	query?: CreateQueryOptions<Awaited<ReturnType<typeof usersControllerGetMe>>, TError, TData>;
+	request?: SecondParameter<typeof customInstance>;
+}): CreateQueryResult<TData, TError> & { queryKey: QueryKey } {
+	const queryOptions = getUsersControllerGetMeQueryOptions(options);
+
+	const query = createQuery(queryOptions) as CreateQueryResult<TData, TError> & {
+		queryKey: QueryKey;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
+}
 
 /**
  * @summary 내 정보 수정
  */
 export const usersControllerUpdateMe = (
-    updateUserDto: BodyType<UpdateUserDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<unknown>(
-      {url: `/users/me`, method: 'PUT',
-      headers: {'Content-Type': 'application/json', },
-      data: updateUserDto
-    },
-      options);
-    }
-  
+	updateUserDto: BodyType<UpdateUserDto>,
+	options?: SecondParameter<typeof customInstance>
+) => {
+	return customInstance<unknown>(
+		{
+			url: `/users/me`,
+			method: 'PUT',
+			headers: { 'Content-Type': 'application/json' },
+			data: updateUserDto
+		},
+		options
+	);
+};
 
+export const getUsersControllerUpdateMeMutationOptions = <
+	TError = ErrorType<void>,
+	TContext = unknown
+>(options?: {
+	mutation?: CreateMutationOptions<
+		Awaited<ReturnType<typeof usersControllerUpdateMe>>,
+		TError,
+		{ data: BodyType<UpdateUserDto> },
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}): CreateMutationOptions<
+	Awaited<ReturnType<typeof usersControllerUpdateMe>>,
+	TError,
+	{ data: BodyType<UpdateUserDto> },
+	TContext
+> => {
+	const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getUsersControllerUpdateMeMutationOptions = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:CreateMutationOptions<Awaited<ReturnType<typeof usersControllerUpdateMe>>, TError,{data: BodyType<UpdateUserDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): CreateMutationOptions<Awaited<ReturnType<typeof usersControllerUpdateMe>>, TError,{data: BodyType<UpdateUserDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof usersControllerUpdateMe>>,
+		{ data: BodyType<UpdateUserDto> }
+	> = (props) => {
+		const { data } = props ?? {};
 
-      
+		return usersControllerUpdateMe(data, requestOptions);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof usersControllerUpdateMe>>, {data: BodyType<UpdateUserDto>}> = (props) => {
-          const {data} = props ?? {};
+export type UsersControllerUpdateMeMutationResult = NonNullable<
+	Awaited<ReturnType<typeof usersControllerUpdateMe>>
+>;
+export type UsersControllerUpdateMeMutationBody = BodyType<UpdateUserDto>;
+export type UsersControllerUpdateMeMutationError = ErrorType<void>;
 
-          return  usersControllerUpdateMe(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UsersControllerUpdateMeMutationResult = NonNullable<Awaited<ReturnType<typeof usersControllerUpdateMe>>>
-    export type UsersControllerUpdateMeMutationBody = BodyType<UpdateUserDto>
-    export type UsersControllerUpdateMeMutationError = ErrorType<void>
-
-    /**
+/**
  * @summary 내 정보 수정
  */
-export const createUsersControllerUpdateMe = <TError = ErrorType<void>,
-    TContext = unknown>(options?: { mutation?:CreateMutationOptions<Awaited<ReturnType<typeof usersControllerUpdateMe>>, TError,{data: BodyType<UpdateUserDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): CreateMutationResult<
-        Awaited<ReturnType<typeof usersControllerUpdateMe>>,
-        TError,
-        {data: BodyType<UpdateUserDto>},
-        TContext
-      > => {
+export const createUsersControllerUpdateMe = <
+	TError = ErrorType<void>,
+	TContext = unknown
+>(options?: {
+	mutation?: CreateMutationOptions<
+		Awaited<ReturnType<typeof usersControllerUpdateMe>>,
+		TError,
+		{ data: BodyType<UpdateUserDto> },
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}): CreateMutationResult<
+	Awaited<ReturnType<typeof usersControllerUpdateMe>>,
+	TError,
+	{ data: BodyType<UpdateUserDto> },
+	TContext
+> => {
+	const mutationOptions = getUsersControllerUpdateMeMutationOptions(options);
 
-      const mutationOptions = getUsersControllerUpdateMeMutationOptions(options);
+	return createMutation(mutationOptions);
+};
+/**
+ * @summary 세션 정보 조회
+ */
+export const usersControllerGetSession = (
+	options?: SecondParameter<typeof customInstance>,
+	signal?: AbortSignal
+) => {
+	return customInstance<void>({ url: `/users/me/session`, method: 'GET', signal }, options);
+};
 
-      return createMutation(mutationOptions);
-    }
-    
+export const getUsersControllerGetSessionQueryKey = () => {
+	return [`/users/me/session`] as const;
+};
+
+export const getUsersControllerGetSessionInfiniteQueryOptions = <
+	TData = Awaited<ReturnType<typeof usersControllerGetSession>>,
+	TError = ErrorType<unknown>
+>(options?: {
+	query?: CreateInfiniteQueryOptions<
+		Awaited<ReturnType<typeof usersControllerGetSession>>,
+		TError,
+		TData
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
+
+	const queryKey = queryOptions?.queryKey ?? getUsersControllerGetSessionQueryKey();
+
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof usersControllerGetSession>>> = ({
+		signal
+	}) => usersControllerGetSession(requestOptions, signal);
+
+	return { queryKey, queryFn, ...queryOptions } as CreateInfiniteQueryOptions<
+		Awaited<ReturnType<typeof usersControllerGetSession>>,
+		TError,
+		TData
+	> & { queryKey: QueryKey };
+};
+
+export type UsersControllerGetSessionInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof usersControllerGetSession>>
+>;
+export type UsersControllerGetSessionInfiniteQueryError = ErrorType<unknown>;
+
+/**
+ * @summary 세션 정보 조회
+ */
+
+export function createUsersControllerGetSessionInfinite<
+	TData = Awaited<ReturnType<typeof usersControllerGetSession>>,
+	TError = ErrorType<unknown>
+>(options?: {
+	query?: CreateInfiniteQueryOptions<
+		Awaited<ReturnType<typeof usersControllerGetSession>>,
+		TError,
+		TData
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}): CreateInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+	const queryOptions = getUsersControllerGetSessionInfiniteQueryOptions(options);
+
+	const query = createInfiniteQuery(queryOptions) as CreateInfiniteQueryResult<TData, TError> & {
+		queryKey: QueryKey;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
+}
+
+export const getUsersControllerGetSessionQueryOptions = <
+	TData = Awaited<ReturnType<typeof usersControllerGetSession>>,
+	TError = ErrorType<unknown>
+>(options?: {
+	query?: CreateQueryOptions<Awaited<ReturnType<typeof usersControllerGetSession>>, TError, TData>;
+	request?: SecondParameter<typeof customInstance>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
+
+	const queryKey = queryOptions?.queryKey ?? getUsersControllerGetSessionQueryKey();
+
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof usersControllerGetSession>>> = ({
+		signal
+	}) => usersControllerGetSession(requestOptions, signal);
+
+	return { queryKey, queryFn, ...queryOptions } as CreateQueryOptions<
+		Awaited<ReturnType<typeof usersControllerGetSession>>,
+		TError,
+		TData
+	> & { queryKey: QueryKey };
+};
+
+export type UsersControllerGetSessionQueryResult = NonNullable<
+	Awaited<ReturnType<typeof usersControllerGetSession>>
+>;
+export type UsersControllerGetSessionQueryError = ErrorType<unknown>;
+
+/**
+ * @summary 세션 정보 조회
+ */
+
+export function createUsersControllerGetSession<
+	TData = Awaited<ReturnType<typeof usersControllerGetSession>>,
+	TError = ErrorType<unknown>
+>(options?: {
+	query?: CreateQueryOptions<Awaited<ReturnType<typeof usersControllerGetSession>>, TError, TData>;
+	request?: SecondParameter<typeof customInstance>;
+}): CreateQueryResult<TData, TError> & { queryKey: QueryKey } {
+	const queryOptions = getUsersControllerGetSessionQueryOptions(options);
+
+	const query = createQuery(queryOptions) as CreateQueryResult<TData, TError> & {
+		queryKey: QueryKey;
+	};
+
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
+}

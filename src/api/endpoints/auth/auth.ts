@@ -5,512 +5,648 @@
  * 암표 방지 티켓 예매 서비스 Vedge API 문서
  * OpenAPI spec version: 1.0
  */
-import {
-  createInfiniteQuery,
-  createMutation,
-  createQuery
-} from '@tanstack/svelte-query'
+import { createInfiniteQuery, createMutation, createQuery } from '@tanstack/svelte-query';
 import type {
-  CreateInfiniteQueryOptions,
-  CreateInfiniteQueryResult,
-  CreateMutationOptions,
-  CreateMutationResult,
-  CreateQueryOptions,
-  CreateQueryResult,
-  MutationFunction,
-  QueryFunction,
-  QueryKey
-} from '@tanstack/svelte-query'
+	CreateInfiniteQueryOptions,
+	CreateInfiniteQueryResult,
+	CreateMutationOptions,
+	CreateMutationResult,
+	CreateQueryOptions,
+	CreateQueryResult,
+	MutationFunction,
+	QueryFunction,
+	QueryKey
+} from '@tanstack/svelte-query';
 import type {
-  LoginRequestDto,
-  PhoneVerificationDto,
-  RegisterDto,
-  VerifyCodeDto
-} from '../../schemas'
+	LoginRequestDto,
+	PhoneVerificationDto,
+	RegisterDto,
+	VerifyCodeDto
+} from '../../schemas';
 import { customInstance } from '../../mutator/axios';
 import type { ErrorType, BodyType } from '../../mutator/axios';
 
-
 type SecondParameter<T extends (...args: any) => any> = Parameters<T>[1];
-
 
 /**
  * @summary 휴대폰 인증번호 요청 (회원가입)
  */
 export const authControllerRequestVerification = (
-    phoneVerificationDto: BodyType<PhoneVerificationDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<void>(
-      {url: `/auth/phone/request`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: phoneVerificationDto
-    },
-      options);
-    }
-  
+	phoneVerificationDto: BodyType<PhoneVerificationDto>,
+	options?: SecondParameter<typeof customInstance>
+) => {
+	return customInstance<void>(
+		{
+			url: `/auth/phone/request`,
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			data: phoneVerificationDto
+		},
+		options
+	);
+};
 
+export const getAuthControllerRequestVerificationMutationOptions = <
+	TError = ErrorType<unknown>,
+	TContext = unknown
+>(options?: {
+	mutation?: CreateMutationOptions<
+		Awaited<ReturnType<typeof authControllerRequestVerification>>,
+		TError,
+		{ data: BodyType<PhoneVerificationDto> },
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}): CreateMutationOptions<
+	Awaited<ReturnType<typeof authControllerRequestVerification>>,
+	TError,
+	{ data: BodyType<PhoneVerificationDto> },
+	TContext
+> => {
+	const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getAuthControllerRequestVerificationMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:CreateMutationOptions<Awaited<ReturnType<typeof authControllerRequestVerification>>, TError,{data: BodyType<PhoneVerificationDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): CreateMutationOptions<Awaited<ReturnType<typeof authControllerRequestVerification>>, TError,{data: BodyType<PhoneVerificationDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof authControllerRequestVerification>>,
+		{ data: BodyType<PhoneVerificationDto> }
+	> = (props) => {
+		const { data } = props ?? {};
 
-      
+		return authControllerRequestVerification(data, requestOptions);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authControllerRequestVerification>>, {data: BodyType<PhoneVerificationDto>}> = (props) => {
-          const {data} = props ?? {};
+export type AuthControllerRequestVerificationMutationResult = NonNullable<
+	Awaited<ReturnType<typeof authControllerRequestVerification>>
+>;
+export type AuthControllerRequestVerificationMutationBody = BodyType<PhoneVerificationDto>;
+export type AuthControllerRequestVerificationMutationError = ErrorType<unknown>;
 
-          return  authControllerRequestVerification(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type AuthControllerRequestVerificationMutationResult = NonNullable<Awaited<ReturnType<typeof authControllerRequestVerification>>>
-    export type AuthControllerRequestVerificationMutationBody = BodyType<PhoneVerificationDto>
-    export type AuthControllerRequestVerificationMutationError = ErrorType<unknown>
-
-    /**
+/**
  * @summary 휴대폰 인증번호 요청 (회원가입)
  */
-export const createAuthControllerRequestVerification = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:CreateMutationOptions<Awaited<ReturnType<typeof authControllerRequestVerification>>, TError,{data: BodyType<PhoneVerificationDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): CreateMutationResult<
-        Awaited<ReturnType<typeof authControllerRequestVerification>>,
-        TError,
-        {data: BodyType<PhoneVerificationDto>},
-        TContext
-      > => {
+export const createAuthControllerRequestVerification = <
+	TError = ErrorType<unknown>,
+	TContext = unknown
+>(options?: {
+	mutation?: CreateMutationOptions<
+		Awaited<ReturnType<typeof authControllerRequestVerification>>,
+		TError,
+		{ data: BodyType<PhoneVerificationDto> },
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}): CreateMutationResult<
+	Awaited<ReturnType<typeof authControllerRequestVerification>>,
+	TError,
+	{ data: BodyType<PhoneVerificationDto> },
+	TContext
+> => {
+	const mutationOptions = getAuthControllerRequestVerificationMutationOptions(options);
 
-      const mutationOptions = getAuthControllerRequestVerificationMutationOptions(options);
-
-      return createMutation(mutationOptions);
-    }
-    /**
+	return createMutation(mutationOptions);
+};
+/**
  * @summary 로그인 인증번호 요청
  */
 export const authControllerRequestLoginVerification = (
-    loginRequestDto: BodyType<LoginRequestDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<void>(
-      {url: `/auth/login/request`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: loginRequestDto
-    },
-      options);
-    }
-  
+	loginRequestDto: BodyType<LoginRequestDto>,
+	options?: SecondParameter<typeof customInstance>
+) => {
+	return customInstance<void>(
+		{
+			url: `/auth/login/request`,
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			data: loginRequestDto
+		},
+		options
+	);
+};
 
+export const getAuthControllerRequestLoginVerificationMutationOptions = <
+	TError = ErrorType<unknown>,
+	TContext = unknown
+>(options?: {
+	mutation?: CreateMutationOptions<
+		Awaited<ReturnType<typeof authControllerRequestLoginVerification>>,
+		TError,
+		{ data: BodyType<LoginRequestDto> },
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}): CreateMutationOptions<
+	Awaited<ReturnType<typeof authControllerRequestLoginVerification>>,
+	TError,
+	{ data: BodyType<LoginRequestDto> },
+	TContext
+> => {
+	const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getAuthControllerRequestLoginVerificationMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:CreateMutationOptions<Awaited<ReturnType<typeof authControllerRequestLoginVerification>>, TError,{data: BodyType<LoginRequestDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): CreateMutationOptions<Awaited<ReturnType<typeof authControllerRequestLoginVerification>>, TError,{data: BodyType<LoginRequestDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof authControllerRequestLoginVerification>>,
+		{ data: BodyType<LoginRequestDto> }
+	> = (props) => {
+		const { data } = props ?? {};
 
-      
+		return authControllerRequestLoginVerification(data, requestOptions);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authControllerRequestLoginVerification>>, {data: BodyType<LoginRequestDto>}> = (props) => {
-          const {data} = props ?? {};
+export type AuthControllerRequestLoginVerificationMutationResult = NonNullable<
+	Awaited<ReturnType<typeof authControllerRequestLoginVerification>>
+>;
+export type AuthControllerRequestLoginVerificationMutationBody = BodyType<LoginRequestDto>;
+export type AuthControllerRequestLoginVerificationMutationError = ErrorType<unknown>;
 
-          return  authControllerRequestLoginVerification(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type AuthControllerRequestLoginVerificationMutationResult = NonNullable<Awaited<ReturnType<typeof authControllerRequestLoginVerification>>>
-    export type AuthControllerRequestLoginVerificationMutationBody = BodyType<LoginRequestDto>
-    export type AuthControllerRequestLoginVerificationMutationError = ErrorType<unknown>
-
-    /**
+/**
  * @summary 로그인 인증번호 요청
  */
-export const createAuthControllerRequestLoginVerification = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:CreateMutationOptions<Awaited<ReturnType<typeof authControllerRequestLoginVerification>>, TError,{data: BodyType<LoginRequestDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): CreateMutationResult<
-        Awaited<ReturnType<typeof authControllerRequestLoginVerification>>,
-        TError,
-        {data: BodyType<LoginRequestDto>},
-        TContext
-      > => {
+export const createAuthControllerRequestLoginVerification = <
+	TError = ErrorType<unknown>,
+	TContext = unknown
+>(options?: {
+	mutation?: CreateMutationOptions<
+		Awaited<ReturnType<typeof authControllerRequestLoginVerification>>,
+		TError,
+		{ data: BodyType<LoginRequestDto> },
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}): CreateMutationResult<
+	Awaited<ReturnType<typeof authControllerRequestLoginVerification>>,
+	TError,
+	{ data: BodyType<LoginRequestDto> },
+	TContext
+> => {
+	const mutationOptions = getAuthControllerRequestLoginVerificationMutationOptions(options);
 
-      const mutationOptions = getAuthControllerRequestLoginVerificationMutationOptions(options);
-
-      return createMutation(mutationOptions);
-    }
-    export const authControllerVerifyPhone = (
-    verifyCodeDto: BodyType<VerifyCodeDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<void>(
-      {url: `/auth/phone/verify`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: verifyCodeDto
-    },
-      options);
-    }
-  
-
-
-export const getAuthControllerVerifyPhoneMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:CreateMutationOptions<Awaited<ReturnType<typeof authControllerVerifyPhone>>, TError,{data: BodyType<VerifyCodeDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): CreateMutationOptions<Awaited<ReturnType<typeof authControllerVerifyPhone>>, TError,{data: BodyType<VerifyCodeDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authControllerVerifyPhone>>, {data: BodyType<VerifyCodeDto>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  authControllerVerifyPhone(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type AuthControllerVerifyPhoneMutationResult = NonNullable<Awaited<ReturnType<typeof authControllerVerifyPhone>>>
-    export type AuthControllerVerifyPhoneMutationBody = BodyType<VerifyCodeDto>
-    export type AuthControllerVerifyPhoneMutationError = ErrorType<unknown>
-
-    export const createAuthControllerVerifyPhone = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:CreateMutationOptions<Awaited<ReturnType<typeof authControllerVerifyPhone>>, TError,{data: BodyType<VerifyCodeDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): CreateMutationResult<
-        Awaited<ReturnType<typeof authControllerVerifyPhone>>,
-        TError,
-        {data: BodyType<VerifyCodeDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getAuthControllerVerifyPhoneMutationOptions(options);
-
-      return createMutation(mutationOptions);
-    }
-    export const authControllerVerifyLogin = (
-    verifyCodeDto: BodyType<VerifyCodeDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<void>(
-      {url: `/auth/login/verify`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: verifyCodeDto
-    },
-      options);
-    }
-  
-
-
-export const getAuthControllerVerifyLoginMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:CreateMutationOptions<Awaited<ReturnType<typeof authControllerVerifyLogin>>, TError,{data: BodyType<VerifyCodeDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): CreateMutationOptions<Awaited<ReturnType<typeof authControllerVerifyLogin>>, TError,{data: BodyType<VerifyCodeDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authControllerVerifyLogin>>, {data: BodyType<VerifyCodeDto>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  authControllerVerifyLogin(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type AuthControllerVerifyLoginMutationResult = NonNullable<Awaited<ReturnType<typeof authControllerVerifyLogin>>>
-    export type AuthControllerVerifyLoginMutationBody = BodyType<VerifyCodeDto>
-    export type AuthControllerVerifyLoginMutationError = ErrorType<unknown>
-
-    export const createAuthControllerVerifyLogin = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:CreateMutationOptions<Awaited<ReturnType<typeof authControllerVerifyLogin>>, TError,{data: BodyType<VerifyCodeDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): CreateMutationResult<
-        Awaited<ReturnType<typeof authControllerVerifyLogin>>,
-        TError,
-        {data: BodyType<VerifyCodeDto>},
-        TContext
-      > => {
-
-      const mutationOptions = getAuthControllerVerifyLoginMutationOptions(options);
-
-      return createMutation(mutationOptions);
-    }
-    export const authControllerGetMe = (
-    
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+	return createMutation(mutationOptions);
+};
+export const authControllerVerifyPhone = (
+	verifyCodeDto: BodyType<VerifyCodeDto>,
+	options?: SecondParameter<typeof customInstance>
 ) => {
-      
-      
-      return customInstance<void>(
-      {url: `/auth/me`, method: 'GET', signal
-    },
-      options);
-    }
-  
+	return customInstance<void>(
+		{
+			url: `/auth/phone/verify`,
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			data: verifyCodeDto
+		},
+		options
+	);
+};
+
+export const getAuthControllerVerifyPhoneMutationOptions = <
+	TError = ErrorType<unknown>,
+	TContext = unknown
+>(options?: {
+	mutation?: CreateMutationOptions<
+		Awaited<ReturnType<typeof authControllerVerifyPhone>>,
+		TError,
+		{ data: BodyType<VerifyCodeDto> },
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}): CreateMutationOptions<
+	Awaited<ReturnType<typeof authControllerVerifyPhone>>,
+	TError,
+	{ data: BodyType<VerifyCodeDto> },
+	TContext
+> => {
+	const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof authControllerVerifyPhone>>,
+		{ data: BodyType<VerifyCodeDto> }
+	> = (props) => {
+		const { data } = props ?? {};
+
+		return authControllerVerifyPhone(data, requestOptions);
+	};
+
+	return { mutationFn, ...mutationOptions };
+};
+
+export type AuthControllerVerifyPhoneMutationResult = NonNullable<
+	Awaited<ReturnType<typeof authControllerVerifyPhone>>
+>;
+export type AuthControllerVerifyPhoneMutationBody = BodyType<VerifyCodeDto>;
+export type AuthControllerVerifyPhoneMutationError = ErrorType<unknown>;
+
+export const createAuthControllerVerifyPhone = <
+	TError = ErrorType<unknown>,
+	TContext = unknown
+>(options?: {
+	mutation?: CreateMutationOptions<
+		Awaited<ReturnType<typeof authControllerVerifyPhone>>,
+		TError,
+		{ data: BodyType<VerifyCodeDto> },
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}): CreateMutationResult<
+	Awaited<ReturnType<typeof authControllerVerifyPhone>>,
+	TError,
+	{ data: BodyType<VerifyCodeDto> },
+	TContext
+> => {
+	const mutationOptions = getAuthControllerVerifyPhoneMutationOptions(options);
+
+	return createMutation(mutationOptions);
+};
+export const authControllerVerifyLogin = (
+	verifyCodeDto: BodyType<VerifyCodeDto>,
+	options?: SecondParameter<typeof customInstance>
+) => {
+	return customInstance<void>(
+		{
+			url: `/auth/login/verify`,
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			data: verifyCodeDto
+		},
+		options
+	);
+};
+
+export const getAuthControllerVerifyLoginMutationOptions = <
+	TError = ErrorType<unknown>,
+	TContext = unknown
+>(options?: {
+	mutation?: CreateMutationOptions<
+		Awaited<ReturnType<typeof authControllerVerifyLogin>>,
+		TError,
+		{ data: BodyType<VerifyCodeDto> },
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}): CreateMutationOptions<
+	Awaited<ReturnType<typeof authControllerVerifyLogin>>,
+	TError,
+	{ data: BodyType<VerifyCodeDto> },
+	TContext
+> => {
+	const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof authControllerVerifyLogin>>,
+		{ data: BodyType<VerifyCodeDto> }
+	> = (props) => {
+		const { data } = props ?? {};
+
+		return authControllerVerifyLogin(data, requestOptions);
+	};
+
+	return { mutationFn, ...mutationOptions };
+};
+
+export type AuthControllerVerifyLoginMutationResult = NonNullable<
+	Awaited<ReturnType<typeof authControllerVerifyLogin>>
+>;
+export type AuthControllerVerifyLoginMutationBody = BodyType<VerifyCodeDto>;
+export type AuthControllerVerifyLoginMutationError = ErrorType<unknown>;
+
+export const createAuthControllerVerifyLogin = <
+	TError = ErrorType<unknown>,
+	TContext = unknown
+>(options?: {
+	mutation?: CreateMutationOptions<
+		Awaited<ReturnType<typeof authControllerVerifyLogin>>,
+		TError,
+		{ data: BodyType<VerifyCodeDto> },
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}): CreateMutationResult<
+	Awaited<ReturnType<typeof authControllerVerifyLogin>>,
+	TError,
+	{ data: BodyType<VerifyCodeDto> },
+	TContext
+> => {
+	const mutationOptions = getAuthControllerVerifyLoginMutationOptions(options);
+
+	return createMutation(mutationOptions);
+};
+export const authControllerGetMe = (
+	options?: SecondParameter<typeof customInstance>,
+	signal?: AbortSignal
+) => {
+	return customInstance<void>({ url: `/auth/me`, method: 'GET', signal }, options);
+};
 
 export const getAuthControllerGetMeQueryKey = () => {
-    return [`/auth/me`] as const;
-    }
+	return [`/auth/me`] as const;
+};
 
-    
-export const getAuthControllerGetMeInfiniteQueryOptions = <TData = Awaited<ReturnType<typeof authControllerGetMe>>, TError = ErrorType<unknown>>( options?: { query?:CreateInfiniteQueryOptions<Awaited<ReturnType<typeof authControllerGetMe>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
-) => {
+export const getAuthControllerGetMeInfiniteQueryOptions = <
+	TData = Awaited<ReturnType<typeof authControllerGetMe>>,
+	TError = ErrorType<unknown>
+>(options?: {
+	query?: CreateInfiniteQueryOptions<
+		Awaited<ReturnType<typeof authControllerGetMe>>,
+		TError,
+		TData
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+	const queryKey = queryOptions?.queryKey ?? getAuthControllerGetMeQueryKey();
 
-  const queryKey =  queryOptions?.queryKey ?? getAuthControllerGetMeQueryKey();
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof authControllerGetMe>>> = ({ signal }) =>
+		authControllerGetMe(requestOptions, signal);
 
-  
+	return { queryKey, queryFn, ...queryOptions } as CreateInfiniteQueryOptions<
+		Awaited<ReturnType<typeof authControllerGetMe>>,
+		TError,
+		TData
+	> & { queryKey: QueryKey };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof authControllerGetMe>>> = ({ signal }) => authControllerGetMe(requestOptions, signal);
+export type AuthControllerGetMeInfiniteQueryResult = NonNullable<
+	Awaited<ReturnType<typeof authControllerGetMe>>
+>;
+export type AuthControllerGetMeInfiniteQueryError = ErrorType<unknown>;
 
-      
+export function createAuthControllerGetMeInfinite<
+	TData = Awaited<ReturnType<typeof authControllerGetMe>>,
+	TError = ErrorType<unknown>
+>(options?: {
+	query?: CreateInfiniteQueryOptions<
+		Awaited<ReturnType<typeof authControllerGetMe>>,
+		TError,
+		TData
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}): CreateInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+	const queryOptions = getAuthControllerGetMeInfiniteQueryOptions(options);
 
-      
+	const query = createInfiniteQuery(queryOptions) as CreateInfiniteQueryResult<TData, TError> & {
+		queryKey: QueryKey;
+	};
 
-   return  { queryKey, queryFn, ...queryOptions} as CreateInfiniteQueryOptions<Awaited<ReturnType<typeof authControllerGetMe>>, TError, TData> & { queryKey: QueryKey }
+	query.queryKey = queryOptions.queryKey;
+
+	return query;
 }
 
-export type AuthControllerGetMeInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof authControllerGetMe>>>
-export type AuthControllerGetMeInfiniteQueryError = ErrorType<unknown>
+export const getAuthControllerGetMeQueryOptions = <
+	TData = Awaited<ReturnType<typeof authControllerGetMe>>,
+	TError = ErrorType<unknown>
+>(options?: {
+	query?: CreateQueryOptions<Awaited<ReturnType<typeof authControllerGetMe>>, TError, TData>;
+	request?: SecondParameter<typeof customInstance>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
 
+	const queryKey = queryOptions?.queryKey ?? getAuthControllerGetMeQueryKey();
 
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof authControllerGetMe>>> = ({ signal }) =>
+		authControllerGetMe(requestOptions, signal);
 
-export function createAuthControllerGetMeInfinite<TData = Awaited<ReturnType<typeof authControllerGetMe>>, TError = ErrorType<unknown>>(
-  options?: { query?:CreateInfiniteQueryOptions<Awaited<ReturnType<typeof authControllerGetMe>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
+	return { queryKey, queryFn, ...queryOptions } as CreateQueryOptions<
+		Awaited<ReturnType<typeof authControllerGetMe>>,
+		TError,
+		TData
+	> & { queryKey: QueryKey };
+};
 
-  ): CreateInfiniteQueryResult<TData, TError> & { queryKey: QueryKey } {
+export type AuthControllerGetMeQueryResult = NonNullable<
+	Awaited<ReturnType<typeof authControllerGetMe>>
+>;
+export type AuthControllerGetMeQueryError = ErrorType<unknown>;
 
-  const queryOptions = getAuthControllerGetMeInfiniteQueryOptions(options)
+export function createAuthControllerGetMe<
+	TData = Awaited<ReturnType<typeof authControllerGetMe>>,
+	TError = ErrorType<unknown>
+>(options?: {
+	query?: CreateQueryOptions<Awaited<ReturnType<typeof authControllerGetMe>>, TError, TData>;
+	request?: SecondParameter<typeof customInstance>;
+}): CreateQueryResult<TData, TError> & { queryKey: QueryKey } {
+	const queryOptions = getAuthControllerGetMeQueryOptions(options);
 
-  const query = createInfiniteQuery(queryOptions) as CreateInfiniteQueryResult<TData, TError> & { queryKey: QueryKey };
+	const query = createQuery(queryOptions) as CreateQueryResult<TData, TError> & {
+		queryKey: QueryKey;
+	};
 
-  query.queryKey = queryOptions.queryKey ;
+	query.queryKey = queryOptions.queryKey;
 
-  return query;
+	return query;
 }
-
-
-
-export const getAuthControllerGetMeQueryOptions = <TData = Awaited<ReturnType<typeof authControllerGetMe>>, TError = ErrorType<unknown>>( options?: { query?:CreateQueryOptions<Awaited<ReturnType<typeof authControllerGetMe>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getAuthControllerGetMeQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof authControllerGetMe>>> = ({ signal }) => authControllerGetMe(requestOptions, signal);
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as CreateQueryOptions<Awaited<ReturnType<typeof authControllerGetMe>>, TError, TData> & { queryKey: QueryKey }
-}
-
-export type AuthControllerGetMeQueryResult = NonNullable<Awaited<ReturnType<typeof authControllerGetMe>>>
-export type AuthControllerGetMeQueryError = ErrorType<unknown>
-
-
-
-export function createAuthControllerGetMe<TData = Awaited<ReturnType<typeof authControllerGetMe>>, TError = ErrorType<unknown>>(
-  options?: { query?:CreateQueryOptions<Awaited<ReturnType<typeof authControllerGetMe>>, TError, TData>, request?: SecondParameter<typeof customInstance>}
-
-  ): CreateQueryResult<TData, TError> & { queryKey: QueryKey } {
-
-  const queryOptions = getAuthControllerGetMeQueryOptions(options)
-
-  const query = createQuery(queryOptions) as CreateQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
 
 /**
  * @summary 회원가입 (인증완료 후)
  */
 export const authControllerRegister = (
-    registerDto: BodyType<RegisterDto>,
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<void>(
-      {url: `/auth/register`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: registerDto
-    },
-      options);
-    }
-  
+	registerDto: BodyType<RegisterDto>,
+	options?: SecondParameter<typeof customInstance>
+) => {
+	return customInstance<void>(
+		{
+			url: `/auth/register`,
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			data: registerDto
+		},
+		options
+	);
+};
 
+export const getAuthControllerRegisterMutationOptions = <
+	TError = ErrorType<unknown>,
+	TContext = unknown
+>(options?: {
+	mutation?: CreateMutationOptions<
+		Awaited<ReturnType<typeof authControllerRegister>>,
+		TError,
+		{ data: BodyType<RegisterDto> },
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}): CreateMutationOptions<
+	Awaited<ReturnType<typeof authControllerRegister>>,
+	TError,
+	{ data: BodyType<RegisterDto> },
+	TContext
+> => {
+	const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getAuthControllerRegisterMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:CreateMutationOptions<Awaited<ReturnType<typeof authControllerRegister>>, TError,{data: BodyType<RegisterDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): CreateMutationOptions<Awaited<ReturnType<typeof authControllerRegister>>, TError,{data: BodyType<RegisterDto>}, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof authControllerRegister>>,
+		{ data: BodyType<RegisterDto> }
+	> = (props) => {
+		const { data } = props ?? {};
 
-      
+		return authControllerRegister(data, requestOptions);
+	};
 
+	return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authControllerRegister>>, {data: BodyType<RegisterDto>}> = (props) => {
-          const {data} = props ?? {};
+export type AuthControllerRegisterMutationResult = NonNullable<
+	Awaited<ReturnType<typeof authControllerRegister>>
+>;
+export type AuthControllerRegisterMutationBody = BodyType<RegisterDto>;
+export type AuthControllerRegisterMutationError = ErrorType<unknown>;
 
-          return  authControllerRegister(data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type AuthControllerRegisterMutationResult = NonNullable<Awaited<ReturnType<typeof authControllerRegister>>>
-    export type AuthControllerRegisterMutationBody = BodyType<RegisterDto>
-    export type AuthControllerRegisterMutationError = ErrorType<unknown>
-
-    /**
+/**
  * @summary 회원가입 (인증완료 후)
  */
-export const createAuthControllerRegister = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:CreateMutationOptions<Awaited<ReturnType<typeof authControllerRegister>>, TError,{data: BodyType<RegisterDto>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): CreateMutationResult<
-        Awaited<ReturnType<typeof authControllerRegister>>,
-        TError,
-        {data: BodyType<RegisterDto>},
-        TContext
-      > => {
+export const createAuthControllerRegister = <
+	TError = ErrorType<unknown>,
+	TContext = unknown
+>(options?: {
+	mutation?: CreateMutationOptions<
+		Awaited<ReturnType<typeof authControllerRegister>>,
+		TError,
+		{ data: BodyType<RegisterDto> },
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}): CreateMutationResult<
+	Awaited<ReturnType<typeof authControllerRegister>>,
+	TError,
+	{ data: BodyType<RegisterDto> },
+	TContext
+> => {
+	const mutationOptions = getAuthControllerRegisterMutationOptions(options);
 
-      const mutationOptions = getAuthControllerRegisterMutationOptions(options);
-
-      return createMutation(mutationOptions);
-    }
-    /**
+	return createMutation(mutationOptions);
+};
+/**
  * @summary 로그아웃
  */
-export const authControllerLogout = (
-    
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<void>(
-      {url: `/auth/logout`, method: 'POST'
-    },
-      options);
-    }
-  
+export const authControllerLogout = (options?: SecondParameter<typeof customInstance>) => {
+	return customInstance<void>({ url: `/auth/logout`, method: 'POST' }, options);
+};
 
+export const getAuthControllerLogoutMutationOptions = <
+	TError = ErrorType<unknown>,
+	TContext = unknown
+>(options?: {
+	mutation?: CreateMutationOptions<
+		Awaited<ReturnType<typeof authControllerLogout>>,
+		TError,
+		void,
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}): CreateMutationOptions<
+	Awaited<ReturnType<typeof authControllerLogout>>,
+	TError,
+	void,
+	TContext
+> => {
+	const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getAuthControllerLogoutMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:CreateMutationOptions<Awaited<ReturnType<typeof authControllerLogout>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
-): CreateMutationOptions<Awaited<ReturnType<typeof authControllerLogout>>, TError,void, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof authControllerLogout>>,
+		void
+	> = () => {
+		return authControllerLogout(requestOptions);
+	};
 
-      
+	return { mutationFn, ...mutationOptions };
+};
 
+export type AuthControllerLogoutMutationResult = NonNullable<
+	Awaited<ReturnType<typeof authControllerLogout>>
+>;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authControllerLogout>>, void> = () => {
-          
+export type AuthControllerLogoutMutationError = ErrorType<unknown>;
 
-          return  authControllerLogout(requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type AuthControllerLogoutMutationResult = NonNullable<Awaited<ReturnType<typeof authControllerLogout>>>
-    
-    export type AuthControllerLogoutMutationError = ErrorType<unknown>
-
-    /**
+/**
  * @summary 로그아웃
  */
-export const createAuthControllerLogout = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:CreateMutationOptions<Awaited<ReturnType<typeof authControllerLogout>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
-): CreateMutationResult<
-        Awaited<ReturnType<typeof authControllerLogout>>,
-        TError,
-        void,
-        TContext
-      > => {
+export const createAuthControllerLogout = <
+	TError = ErrorType<unknown>,
+	TContext = unknown
+>(options?: {
+	mutation?: CreateMutationOptions<
+		Awaited<ReturnType<typeof authControllerLogout>>,
+		TError,
+		void,
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}): CreateMutationResult<
+	Awaited<ReturnType<typeof authControllerLogout>>,
+	TError,
+	void,
+	TContext
+> => {
+	const mutationOptions = getAuthControllerLogoutMutationOptions(options);
 
-      const mutationOptions = getAuthControllerLogoutMutationOptions(options);
-
-      return createMutation(mutationOptions);
-    }
-    /**
+	return createMutation(mutationOptions);
+};
+/**
  * @summary 세션 연장
  */
-export const authControllerExtendSession = (
-    
- options?: SecondParameter<typeof customInstance>,) => {
-      
-      
-      return customInstance<void>(
-      {url: `/auth/session/extend`, method: 'POST'
-    },
-      options);
-    }
-  
+export const authControllerExtendSession = (options?: SecondParameter<typeof customInstance>) => {
+	return customInstance<void>({ url: `/auth/session/extend`, method: 'POST' }, options);
+};
 
+export const getAuthControllerExtendSessionMutationOptions = <
+	TError = ErrorType<unknown>,
+	TContext = unknown
+>(options?: {
+	mutation?: CreateMutationOptions<
+		Awaited<ReturnType<typeof authControllerExtendSession>>,
+		TError,
+		void,
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}): CreateMutationOptions<
+	Awaited<ReturnType<typeof authControllerExtendSession>>,
+	TError,
+	void,
+	TContext
+> => {
+	const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-export const getAuthControllerExtendSessionMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:CreateMutationOptions<Awaited<ReturnType<typeof authControllerExtendSession>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
-): CreateMutationOptions<Awaited<ReturnType<typeof authControllerExtendSession>>, TError,void, TContext> => {
-const {mutation: mutationOptions, request: requestOptions} = options ?? {};
+	const mutationFn: MutationFunction<
+		Awaited<ReturnType<typeof authControllerExtendSession>>,
+		void
+	> = () => {
+		return authControllerExtendSession(requestOptions);
+	};
 
-      
+	return { mutationFn, ...mutationOptions };
+};
 
+export type AuthControllerExtendSessionMutationResult = NonNullable<
+	Awaited<ReturnType<typeof authControllerExtendSession>>
+>;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authControllerExtendSession>>, void> = () => {
-          
+export type AuthControllerExtendSessionMutationError = ErrorType<unknown>;
 
-          return  authControllerExtendSession(requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type AuthControllerExtendSessionMutationResult = NonNullable<Awaited<ReturnType<typeof authControllerExtendSession>>>
-    
-    export type AuthControllerExtendSessionMutationError = ErrorType<unknown>
-
-    /**
+/**
  * @summary 세션 연장
  */
-export const createAuthControllerExtendSession = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:CreateMutationOptions<Awaited<ReturnType<typeof authControllerExtendSession>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
-): CreateMutationResult<
-        Awaited<ReturnType<typeof authControllerExtendSession>>,
-        TError,
-        void,
-        TContext
-      > => {
+export const createAuthControllerExtendSession = <
+	TError = ErrorType<unknown>,
+	TContext = unknown
+>(options?: {
+	mutation?: CreateMutationOptions<
+		Awaited<ReturnType<typeof authControllerExtendSession>>,
+		TError,
+		void,
+		TContext
+	>;
+	request?: SecondParameter<typeof customInstance>;
+}): CreateMutationResult<
+	Awaited<ReturnType<typeof authControllerExtendSession>>,
+	TError,
+	void,
+	TContext
+> => {
+	const mutationOptions = getAuthControllerExtendSessionMutationOptions(options);
 
-      const mutationOptions = getAuthControllerExtendSessionMutationOptions(options);
-
-      return createMutation(mutationOptions);
-    }
-    
+	return createMutation(mutationOptions);
+};
