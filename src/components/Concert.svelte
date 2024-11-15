@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+
 	interface ConcertProps {
 		id: number;
 		image: string;
@@ -9,7 +11,7 @@
 	let { id, image, name, date, address }: ConcertProps = $props();
 </script>
 
-<div class="concert">
+<div class="concert" onclick={async () => await goto('/detail')}>
 	<img class="poster" src={image} alt={name} />
 	<div>
 		<div class="concert-title body accent">

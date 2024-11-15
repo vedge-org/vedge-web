@@ -26,6 +26,20 @@
 		&.selected {
 			background: var(--fixed-contents-accent, #000);
 			color: var(--fixed-contents-accent, #fff);
+			border: none;
 		}
+		cursor: pointer;
+		&:hover {
+			opacity: 0.7;
+		}
+		&:active {
+			transform: scale(0.98);
+		}
+		transition:
+			opacity 0.2s ease,
+			transform 0.2s ease,
+			background 0.2s ease,
+			color 0.2s ease,
+			border 0.2s ease;
 	}
 </style>

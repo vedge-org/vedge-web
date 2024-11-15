@@ -5,10 +5,82 @@
 	import LogoSmall from '../../images/LogoSmall.svelte';
 	import QrImage from '../../images/QRImage.svelte';
 	import Back from '../../images/Back.svelte';
+	import OtpInput from '../../components/OTPInput.svelte';
+	import {
+		authControllerRequestLoginVerification,
+		authControllerVerifyLogin
+	} from '../../api/endpoints/auth/auth';
+	import { goto } from '$app/navigation';
 
 	let tel = $state('');
-	let code = $state('');
+	let otpValue = $state(['', '', '', '', '']);
 	let step = $state(0);
+
+	async function sendVerificationCode(phoneNumber: string) {
+		return await authControllerRequestLoginVerification({
+			phoneNumber: phoneNumber.replace(/[^\d]/g, '')
+		});
+	}
+
+	async function handleSecondButton() {
+		await authControllerVerifyLogin({
+			phoneNumber: tel.replace(/[^\d]/g, ''),
+			code: otpValue.join('')
+		});
+		await goto('/');
+	}
+
+	async function handleFirstButton() {
+		await sendVerificationCode(tel);
+		step = 1;
+	}
+
+	function formatPhoneNumber(value: string) {
+		// 숫자만 추출
+		const numbers = value.replace(/[^\d]/g, '');
+
+		// 11자리를 넘어가면 잘라내기
+		const trimmed = numbers.slice(0, 11);
+
+		// 첫 번째 숫자가 0이 아니면 빈 문자열 반환
+		if (trimmed.length > 0 && trimmed[0] !== '0') {
+			return '';
+		}
+
+		// 포맷팅
+		let formatted = '';
+		if (trimmed.length <= 3) {
+			formatted = trimmed;
+		} else if (trimmed.length <= 7) {
+			formatted = `${trimmed.slice(0, 3)}-${trimmed.slice(3)}`;
+		} else {
+			formatted = `${trimmed.slice(0, 3)}-${trimmed.slice(3, 7)}-${trimmed.slice(7)}`;
+		}
+
+		// 유효한 전화번호 패턴인지 확인
+		const isValid = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/.test(
+			formatted.replace(/-/g, '')
+		);
+
+		return isValid || formatted.length < 13 ? formatted : tel;
+	}
+
+	function handleInput(event: Event) {
+		const input = event.target as HTMLInputElement;
+		const formattedNumber = formatPhoneNumber(input.value);
+
+		// 커서 위치 저장
+		const cursorPosition = input.selectionStart;
+		const oldLength = tel.length;
+
+		tel = formattedNumber;
+
+		// 커서 위치 조정
+		setTimeout(() => {
+			const newCursorPosition = cursorPosition + (formattedNumber.length - oldLength);
+			input.setSelectionRange(newCursorPosition, newCursorPosition);
+		}, 0);
+	}
 </script>
 
 <main>
@@ -27,8 +99,14 @@
 					<LogoSmall />
 					<div class="title accent">로그인</div>
 					<div class="form">
-						<input class="input" type="text" placeholder="전화번호 입력" bind:value={tel} />
-						<button onclick={() => (step = 1)} class="button label accent">
+						<input
+							class="input"
+							type="text"
+							placeholder="전화번호 입력 (예: 010-1234-5678)"
+							bind:value={tel}
+							oninput={handleInput}
+						/>
+						<button onclick={handleFirstButton} class="button label accent">
 							인증번호 요청하기
 						</button>
 					</div>
@@ -62,9 +140,9 @@
 						<Back />
 					</button>
 					<div class="title accent">인증번호 입력</div>
+					<OtpInput bind:otp={otpValue} />
 					<div class="form">
-						<input class="input" type="text" placeholder="인증번호 입력" bind:value={code} />
-						<button class="button label accent"> 인증하기 </button>
+						<button class="button label accent" onclick={handleSecondButton}>인증하기</button>
 					</div>
 				</div>
 			</div>
