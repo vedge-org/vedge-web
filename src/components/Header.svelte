@@ -5,8 +5,9 @@
 	let segPosition = $derived(selected * (90 + 12));
 	const categories = ['콘서트', '뮤지컬', '전시', '행사'];
 	let menuVisible = $state(false);
-	let login = $state(false);
+	let login = $state(true);
 	import { fly } from 'svelte/transition';
+	import { sessionStore } from '../stores/sessionStore';
 
 	function closeMenu() {
 		menuVisible = false;
@@ -32,7 +33,14 @@
 			{/each}
 		</div>
 		<div class="right">
-			{#if login}
+			{#if $sessionStore.user}
+				<div class="label" style="color:#82012A">{$sessionStore.timeLeft} 남음</div>
+				<button
+					class="rightButton caption"
+					onclick={async () => await sessionStore.extendSession()}
+				>
+					세션연장
+				</button>
 				<button class="profile" onclick={() => (menuVisible = true)} />
 			{:else}
 				<a href="/login" class="login label" onclick={() => (login = true)}> 로그인 </a>
@@ -69,6 +77,26 @@
 </nav>
 
 <style lang="scss">
+	.rightButton {
+		display: flex;
+		padding: 4px 12px;
+		justify-content: center;
+		align-items: center;
+		gap: 10px;
+		border-radius: 999px;
+		border: 1px solid $background-gray-border;
+		background: $variable-background-default;
+		transition:
+			transform 0.2s ease,
+			opacity 0.2s ease;
+		cursor: pointer;
+		&:hover {
+			opacity: 0.5;
+		}
+		&:active {
+			transform: scale(0.98);
+		}
+	}
 	.menuItem {
 		background: none;
 		border: none;
@@ -114,6 +142,7 @@
 		border: none;
 		color: $contents-default-tertiary;
 		cursor: pointer;
+		text-decoration: none;
 		&:hover {
 			color: $contents-default-quaternary;
 		}
