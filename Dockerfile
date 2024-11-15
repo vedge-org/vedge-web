@@ -15,4 +15,4 @@ ENV PORT=80
 ENV NODE_ENV=production
 ENV ORIGIN=https://your-domain.com
 
-CMD ["pnpm", "start"]
+CMD ["node", "build"]
