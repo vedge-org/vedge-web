@@ -8,10 +8,10 @@
 	import { onMount } from 'svelte';
 
 	let clockImages = $state([]);
-	let correctImageIndex = null;
+	let correctImageIndex;
 	let correctTime = $state({ hour: 0, minute: 0 });
 
-	let selectedImageIndex = $state(null);
+	let selectedImageIndex = $state();
 
 	function generateRandomTime() {
 		return {
@@ -97,7 +97,7 @@
 			})();
 
 			const responses = await Promise.all([
-				axios.post('https://vedgeai.apne2a.algorix.cloud/clock_captcha_color/', correctTime, {
+				axios.post('https://vedgeai.apne2a.algorix.cloud/clock_captcha_mono/', correctTime, {
 					headers: {
 						'Content-Type': 'application/json',
 						Accept: 'application/json'
@@ -131,7 +131,7 @@
 				};
 			});
 
-			correctImageIndex = 0;
+			correctImageIndex = clockImages.findIndex((image) => image.isCorrect);
 			clockImages = clockImages.sort(() => Math.random() - 0.5);
 		} catch (error) {
 			console.error('Error fetching images:', error);
@@ -170,8 +170,6 @@
 						<div class="clockContainer">
 							<img
 								onclick={(e) => {
-									e.stopPropagation();
-									e.preventDefault();
 									selectedImageIndex = index;
 								}}
 								class:selected={selectedImageIndex === index}
@@ -192,7 +190,7 @@
 							step = 2;
 						}
 					}}
-					disabled={selectedImageIndex === null}
+					aria-disabled={selectedImageIndex === null}
 					class="button"
 					style="background-color: red;"
 				>
