@@ -1,7 +1,7 @@
 import Axios, { type AxiosError, type AxiosRequestConfig } from 'axios';
 
 export const AXIOS_INSTANCE = Axios.create({
-	baseURL: process.env.API_URL,
+	baseURL: import.meta.env.VITE_API_URL,
 	withCredentials: true
 });
 
