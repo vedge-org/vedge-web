@@ -52,20 +52,12 @@
 					transition:fly={{ y: -10, duration: 200 }}
 					use:clickOutside={{ enabled: menuVisible, callback: closeMenu }}
 				>
+					<a class="label menuItem" href="/ticket"> 티켓내역 </a>
 					<button
 						class="label menuItem"
 						onclick={() => {
-							// 로그인 처리
-							menuVisible = false;
-						}}
-					>
-						티켓내역
-					</button>
-					<button
-						class="label menuItem"
-						onclick={() => {
-							// 로그인 처리
-							menuVisible = false;
+							sessionStore.logout();
+							closeMenu();
 						}}
 					>
 						로그아웃
@@ -107,6 +99,7 @@
 		gap: 10px;
 		border-radius: 4px;
 		align-self: stretch;
+		text-decoration: underline;
 		cursor: pointer;
 		transition:
 			background-color 0.2s ease,

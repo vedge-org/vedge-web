@@ -60,6 +60,11 @@
 					※ 본 공연은 안심 예매(보안문자) 서비스가 적용됩니다. <br />
 					※ 본 공연은 예매 대기 서비스와 동일 좌석 재예매서비스 이용이 제한됩니다.
 				</div>
+				<div class="title2">
+					<div class="headline accent">공연상세 / 출연진정보</div>
+				</div>
+				<div class="poster" alt="poster" />
+				<img src="/images/detail.png" alt="detail" />
 			</div>
 			<div class="sidebar-container">
 				<div class="reservation">
@@ -70,8 +75,8 @@
 					<div class="reservation-section">
 						<div class="reservation-section-top headline accent">날짜 선택</div>
 						<div class="timeContainer">
-							<Chip selected>오후 6시</Chip>
-							<Chip>오후 6시</Chip>
+							<Chip selected>18:30</Chip>
+							<Chip>20:50</Chip>
 						</div>
 					</div>
 					<div class="emptyDivider"></div>
@@ -99,6 +104,13 @@
 </main>
 
 <style lang="scss">
+	.poster {
+		position: relative;
+		background-image: url('/images/poster-6.png');
+		// need to shown 100% width with 3/4 aspect ratio image
+		width: 100%;
+		background-size: cover;
+	}
 	.emptyDivider {
 		display: flex;
 		height: 24px;
@@ -299,6 +311,8 @@
 	}
 
 	.reservation {
+		position: sticky;
+		top: 100px;
 		display: flex;
 		padding: 16px 24px;
 		flex-direction: column;

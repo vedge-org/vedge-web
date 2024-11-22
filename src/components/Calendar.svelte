@@ -5,7 +5,36 @@
 	let year = date.getFullYear();
 	let month = date.getMonth() + 1;
 
+	let monthData = $state();
+
+	function getWeeksInMonth() {
+		const weeks = [];
+		const firstDay = new Date(year, month - 1, 1);
+		const lastDay = new Date(year, month, 0);
+		let start = 1 - firstDay.getDay();
+		let end = 7 - firstDay.getDay();
+
+		while (weeks.length < 7) {
+			const week = [];
+			for (let day = start; day <= end; day++) {
+				const currentDate = new Date(year, month - 1, day);
+				const dayObj = {
+					isCurrentMonth: currentDate.getMonth() === month - 1,
+					isToday: currentDate.toDateString() === new Date().toDateString(),
+					day: day <= 0 ? new Date(year, month, day).getDate() : day
+				};
+				week.push(dayObj);
+			}
+			weeks.push(week);
+			start = end + 1;
+			end = end + 7;
+			end = end > new Date(year, month, 0).getDate() ? new Date(year, month, 0).getDate() : end;
+		}
+		return weeks;
+	}
+
 	onMount(() => {
+		monthData = getWeeksInMonth();
 		const interval = setInterval(() => {
 			date = new Date();
 			year = date.getFullYear();
@@ -83,51 +112,17 @@
 		<div class="day label">토</div>
 	</div>
 	<div class="calendarItems">
-		<div class="itemContainer">
-			<div class="item">1</div>
-			<div class="item">2</div>
-			<div class="item">3</div>
-			<div class="item">4</div>
-			<div class="item">5</div>
-			<div class="item">6</div>
-			<div class="item">7</div>
-		</div>
-		<div class="itemContainer">
-			<div class="item">1</div>
-			<div class="item active">2</div>
-			<div class="item">3</div>
-			<div class="item">4</div>
-			<div class="item">5</div>
-			<div class="item">6</div>
-			<div class="item">7</div>
-		</div>
-		<div class="itemContainer">
-			<div class="item">1</div>
-			<div class="item">2</div>
-			<div class="item">3</div>
-			<div class="item">4</div>
-			<div class="item">5</div>
-			<div class="item">6</div>
-			<div class="item">7</div>
-		</div>
-		<div class="itemContainer">
-			<div class="item">1</div>
-			<div class="item">2</div>
-			<div class="item">3</div>
-			<div class="item">4</div>
-			<div class="item">5</div>
-			<div class="item">6</div>
-			<div class="item">7</div>
-		</div>
-		<div class="itemContainer">
-			<div class="item">1</div>
-			<div class="item">2</div>
-			<div class="item">3</div>
-			<div class="item">4</div>
-			<div class="item">5</div>
-			<div class="item">6</div>
-			<div class="item">7</div>
-		</div>
+		{#each monthData as week}
+			<div class="itemContainer">
+				{#each week as day}
+					<div class="item" class:active={day.isToday}>
+						{#if day.isCurrentMonth}
+							{day.day}
+						{/if}
+					</div>
+				{/each}
+			</div>
+		{/each}
 	</div>
 </div>
 
@@ -190,9 +185,14 @@
 		align-items: center;
 		justify-content: center;
 		flex: 1;
+		user-select: none;
 		color: $contents-default-quaternary;
 		&.active {
-			color: $contents-default-primary;
+			background-color: $contents-default-primary;
+			color: #fff;
+			border-radius: 50%;
+			cursor: pointer;
+			transition: color 0.3s;
 		}
 	}
 

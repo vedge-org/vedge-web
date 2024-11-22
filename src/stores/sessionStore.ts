@@ -2,7 +2,7 @@
 import { writable, derived } from 'svelte/store';
 import type { Writable } from 'svelte/store';
 import { usersControllerGetSession } from '../api/endpoints/users/users';
-import { authControllerExtendSession } from '../api/endpoints/auth/auth';
+import { authControllerExtendSession, authControllerLogout } from '../api/endpoints/auth/auth';
 
 interface SessionState {
 	expiresAt: number | null;
@@ -91,6 +91,17 @@ function createSessionStore() {
 				update((state) => ({
 					...state,
 					error: error instanceof Error ? error.message : '세션 연장 중 오류가 발생했습니다.'
+				}));
+			}
+		},
+		logout: async () => {
+			try {
+				await authControllerLogout();
+				sessionStore.reset();
+			} catch (error) {
+				update((state) => ({
+					...state,
+					error: error instanceof Error ? error.message : '로그아웃 중 오류가 발생했습니다.'
 				}));
 			}
 		}

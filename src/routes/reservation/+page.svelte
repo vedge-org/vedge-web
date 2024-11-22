@@ -85,14 +85,17 @@
 				};
 			});
 
-			correctImageIndex = clockImages.findIndex((image) => image.isCorrect);
 			clockImages = clockImages.sort(() => Math.random() - 0.5);
+			correctImageIndex = clockImages.findIndex((image) => image.isCorrect);
 		} catch (error) {
 			console.error('Error fetching images:', error);
 			clockImages = [];
 			correctImageIndex = null;
 		}
 	}
+	$effect(() => {
+		console.log(selectedImageIndex);
+	});
 
 	onMount(fetchClockImages);
 </script>
@@ -131,7 +134,7 @@
 					{#each clockImages as image, index}
 						<div class="clockContainer">
 							<img
-								onclick={(e) => {
+								onclick={() => {
 									selectedImageIndex = index;
 								}}
 								class:selected={selectedImageIndex === index}
