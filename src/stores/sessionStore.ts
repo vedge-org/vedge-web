@@ -21,7 +21,7 @@ function createSessionStore() {
 	};
 
 	const { subscribe, set, update }: Writable<SessionState> = writable(initialState);
-	let timer: NodeJS.Timer | null = null;
+	let timer: ReturnType<typeof setInterval> | null = null;
 
 	const formatTimeLeft = (expiresAt: number): string => {
 		const now = new Date().getTime();
