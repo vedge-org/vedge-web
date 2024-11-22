@@ -28,7 +28,7 @@
 					<div class="body">공연일시 : 2024.12.31</div>
 					<div class="body2">
 						<span class="body">관람 연령 :</span>
-						<Age age="19" />
+						<Age age={15} />
 						<span class="body">만 15세 이상</span>
 					</div>
 				</div>
