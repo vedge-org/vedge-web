@@ -11,6 +11,7 @@
 		authControllerVerifyLogin
 	} from '../../api/endpoints/auth/auth';
 	import { goto } from '$app/navigation';
+	import { sessionStore } from '../../stores/sessionStore';
 
 	let tel = $state('');
 	let otpValue = $state(['', '', '', '', '']);
@@ -27,6 +28,7 @@
 			phoneNumber: tel.replace(/[^\d]/g, ''),
 			code: otpValue.join('')
 		});
+		sessionStore.fetchSession();
 		await goto('/');
 	}
 
@@ -77,7 +79,7 @@
 
 		// 커서 위치 조정
 		setTimeout(() => {
-			const newCursorPosition = cursorPosition + (formattedNumber.length - oldLength);
+			const newCursorPosition = cursorPosition! + (formattedNumber.length - oldLength);
 			input.setSelectionRange(newCursorPosition, newCursorPosition);
 		}, 0);
 	}
